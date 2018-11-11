@@ -1,8 +1,8 @@
 defmodule EarthquakeTrackerWeb.SessionController do
   use EarthquakeTrackerWeb, :controller
 
-  def create(conn, %{"email" => email}) do
-    user = HuskyShop.Users.get_user_by_email(email)
+  def create(conn, %{"email" => email, "password" => password}) do
+    user = HuskyShop.Users.get_and_auth_user(email, password)
     if user do
       conn
       |> put_session(:user_id, user.id)

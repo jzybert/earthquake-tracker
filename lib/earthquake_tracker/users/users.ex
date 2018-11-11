@@ -43,6 +43,14 @@ defmodule EarthquakeTracker.Users do
     Repo.get_by(User, email: email)
   end
 
+  def get_and_auth_user(email, password) do
+    user = get_user_by_email(email)
+    case Comeonin.Argon2.check_pass(user, password) do
+      {:ok, user} -> user
+      _else       -> nil
+    end
+  end
+
   @doc """
   Creates a user.
 
