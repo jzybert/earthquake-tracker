@@ -5,27 +5,25 @@
     </div>
   <% end %>
 
-  <%= label f, :email %>
-  <%= text_input f, :email %>
-  <%= error_tag f, :email %>
+  <div class="form-group">
+    <%= label f, :email, class: "control-label" %>
+    <%= text_input f, :email, class: "form-control" %>
+    <%= error_tag f, :email %>
+  </div>
 
-  <%= label f, :admin %>
-  <%= checkbox f, :admin %>
-  <%= error_tag f, :admin %>
+  <div class="form-group">
+    <%= label f, :password, class: "control-label" %>
+    <%= password_input f, :password, class: "form-control" %>
+    <%= error_tag f, :password %>
+  </div>
 
-  <%= label f, :password_hash %>
-  <%= text_input f, :password_hash %>
-  <%= error_tag f, :password_hash %>
-
-  <%= label f, :pw_tries %>
-  <%= number_input f, :pw_tries %>
-  <%= error_tag f, :pw_tries %>
-
-  <%= label f, :pw_last_try %>
-  <%= datetime_select f, :pw_last_try %>
-  <%= error_tag f, :pw_last_try %>
+  <div class="form-group">
+    <%= label f, :password_confirmation, class: "control-label" %>
+    <%= password_input f, :password_confirmation, class: "form-control" %>
+    <%= error_tag f, :password_confirmation %>
+  </div>
 
   <div>
-    <%= submit "Save" %>
+    <%= submit "Create User", class: "btn btn-primary" %>
   </div>
 <% end %>

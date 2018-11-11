@@ -1,34 +1,27 @@
-<h1>Listing Users</h1>
+<h1>All Users</h1>
 
-<table>
-  <thead>
+<table class="table table-striped">
+  <thead class="thead-light">
     <tr>
       <th>Email</th>
-      <th>Admin</th>
-      <th>Password hash</th>
-      <th>Pw tries</th>
-      <th>Pw last try</th>
-
+      <th>Admin?</th>
       <th></th>
     </tr>
   </thead>
   <tbody>
 <%= for user <- @users do %>
     <tr>
-      <td><%= user.email %></td>
+      <td><%= link user.email, to: Routes.user_path(@conn, :show, user) %></td>
       <td><%= user.admin %></td>
-      <td><%= user.password_hash %></td>
-      <td><%= user.pw_tries %></td>
-      <td><%= user.pw_last_try %></td>
 
       <td>
-        <%= link "Show", to: Routes.user_path(@conn, :show, user) %>
-        <%= link "Edit", to: Routes.user_path(@conn, :edit, user) %>
-        <%= link "Delete", to: Routes.user_path(@conn, :delete, user), method: :delete, data: [confirm: "Are you sure?"] %>
+        <%= link "Edit", to: Routes.user_path(@conn, :edit, user), class: "btn btn-info btn-sm" %>
+        <%= link "Delete", to: Routes.user_path(@conn, :delete, user), method: :delete, data: [confirm: "Are you sure?"],
+            class: "btn btn-danger btn-sm" %>
       </td>
     </tr>
 <% end %>
   </tbody>
 </table>
 
-<span><%= link "New User", to: Routes.user_path(@conn, :new) %></span>
+<span><%= link "Register New User", to: Routes.user_path(@conn, :new), class: "btn btn-primary" %></span>
