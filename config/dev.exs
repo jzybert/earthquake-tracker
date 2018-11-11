@@ -51,10 +51,21 @@ config :phoenix, :stacktrace_depth, 20
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
 
+get_secret = fn name ->
+  base = Path.expand("~/.config/earthquake_tracker")
+  File.mkdir_p!(base)
+  path = Path.join(base, name)
+  unless File.exists?(path) do
+    secret = Base.encode16(:crypto.strong_rand_bytes(32))
+    File.write!(path, secret)
+  end
+  String.trim(File.read!(path))
+end
+
 # Configure your database
 config :earthquake_tracker, EarthquakeTracker.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "earthquake_tracker",
+  password: get_secret.("db_pass_dev"),
   database: "earthquake_tracker_dev",
   hostname: "localhost",
   pool_size: 10

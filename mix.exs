@@ -41,7 +41,10 @@ defmodule EarthquakeTracker.MixProject do
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
-      {:cowboy, "~> 1.0"}
+      {:cowboy, "~> 2.5"},
+      {:plug_cowboy, "~> 2.0"},
+      {:httpoison, "~>1.4"},
+      {:poison, "~>3.0"}
     ]
   end
 
