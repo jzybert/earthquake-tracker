@@ -4,7 +4,7 @@
     <%= if !@current_user do %>
       <%= link "Click here to register", to: Routes.user_path(@conn, :new) %>
     <% else %>
-        <%= render EarthquakeTrackerWeb.EarthquakeQueryView, "index.html" %>
+        <%= render EarthquakeTrackerWeb.EarthquakeQueryView, "index.html", conn: @conn %>
     <% end %>
   </div>
 </div>

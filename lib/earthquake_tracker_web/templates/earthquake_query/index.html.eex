@@ -1,61 +1,68 @@
 <div class="row">
   <div class="col-12">
-    <form>
+    <%= form_for @conn, Routes.earthquake_query_path(@conn, :query_earthquake), fn f -> %>
       <div class="row">
         <div class="form-group col-6">
-          <label for="startTime">Start Time</label>
-          <input type="date" class="form-control" id="startTime" required>
+          <%= label f, :start_time, class: "control-label" %>
+          <%= date_input f, :start_time, class: "form-control" %>
+          <%= error_tag f, :start_time %>
         </div>
         <div class="form-group col-6">
-          <label for="endTime">End Time</label>
-          <input type="date" class="form-control" id="endTime" required>
+          <%= label f, :end_time, class: "control-label" %>
+          <%= date_input f, :end_time, class: "form-control" %>
+          <%= error_tag f, :end_time %>
         </div>
       </div>
       <div class="row">
         <div class="form-group col-12">
-          <label for="size-select">Location</label>
-          <select class="custom-select" id="size-select">
-            <option selected value="any">Any Location</option>
-            <option value="square">Square</option>
-            <option value="circle">Circle</option>
-          </select>
+          <%= label f, :location, class: "control-label" %>
+          <%= select f, :location, ["Square": "square", "Circle": "circle"],
+              prompt: "Any Location", class: "form-control", id: "size-select" %>
+          <%= error_tag f, :location %>
         </div>
       </div>
       <div class="row" style="display: none" id="square-selected">
         <div class="form-group col-6">
-          <label for="minLat">Minimum Latitude (default -90)</label>
-          <input type="number" class="form-control" id="minLat" value=-90 min=-90 max=90>
+          <%= label f, "Minimum Latitude (default -90)", class: "control-label" %>
+          <%= number_input f, :sq_min_lat, class: "form-control", value: -90, min: -90, max: 90 %>
+          <%= error_tag f, :sq_min_lat %>
 
-          <label for="maxLat">Maximum Latitude (default 90)</label>
-          <input type="number" class="form-control" id="maxLat" value=90 min=-90 max=90>
+          <%= label f, "Maximum Latitude (default 90)", class: "control-label" %>
+          <%= number_input f, :sq_max_lat, class: "form-control", value: 90, min: -90, max: 90 %>
+          <%= error_tag f, :sq_max_lat %>
         </div>
         <div class="form-group col-6">
-          <label for="minLong">Minimum Longitude (default -180)</label>
-          <input type="number" class="form-control" id="minLong" value=-180 min=-180 max=180>
+          <%= label f, "Minimum Longitude (default -180)", class: "control-label" %>
+          <%= number_input f, :sq_min_lng, class: "form-control", value: -180, min: -180, max: 180 %>
+          <%= error_tag f, :sq_min_lng %>
 
-          <label for="maxLong">Maximum Longitude (default 180)</label>
-          <input type="number" class="form-control" id="maxLong" value=180 min=-180 max=180>
+          <%= label f, "Maximum Longitude (default 180)", class: "control-label" %>
+          <%= number_input f, :sq_max_lng, class: "form-control", value: 180, min: -180, max: 180 %>
+          <%= error_tag f, :sq_max_lng %>
         </div>
       </div>
       <div class="row" style="display: none" id="circle-selected">
         <div class="form-group col-12">
           <div class="row">
             <div class="col-6">
-              <label for="latitude">Latitude</label>
-              <input type="number" class="form-control" id="latitude" value=0 min=-90 max=90>
+              <%= label f, "Latitude", class: "control-label" %>
+              <%= number_input f, :ci_lat, class: "form-control", value: 0, min: -90, max: 90 %>
+              <%= error_tag f, :ci_lat %>
             </div>
             <div class="col-6">
-              <label for="longitude">Longitude</label>
-              <input type="number" class="form-control" id="longitude" value=0 min=-180 max=180>
+              <%= label f, "Longitude", class: "control-label" %>
+              <%= number_input f, :ci_lng, class: "form-control", value: 0, min: -180, max: 180 %>
+              <%= error_tag f, :ci_lng %>
             </div>
           </div>
         </div>
         <div class="form-group col-12">
-          <label for="maxRad">Max Radius (default 180)</label>
-          <input type="number" class="form-control" id="maxRad" value=180 min=0 max=180>
+          <%= label f, "Max Radius (default 180)", class: "control-label" %>
+          <%= number_input f, :ci_max_rad, class: "form-control", value: 180, min: 0, max: 180 %>
+          <%= error_tag f, :ci_max_rad %>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+      <%= submit "Query", class: "btn btn-primary" %>
+    <% end %>
   </div>
 </div>
