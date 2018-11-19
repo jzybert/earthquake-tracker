@@ -5,6 +5,10 @@ defmodule EarthquakeTrackerWeb.EarthquakeQueryController do
     render(conn, "index.html")
   end
 
+  def show(conn, %{"eq_data" => eq_data, "num_eq" => num_eq, "start_time" => start_time, "end_time" => end_time}) do
+    render(conn, "show.html", eq_data: eq_data, num_eq: num_eq, start_time: start_time, end_time: end_time)
+  end
+
   def query_earthquake(conn, %{"start_time" => start_time,
       "end_time" => end_time, "location" => location, "sq_min_lat" => sq_min_lat,
       "sq_max_lat" => sq_max_lat, "sq_min_lng" => sq_min_lng, "sq_max_lng" => sq_max_lng,
@@ -26,13 +30,25 @@ defmodule EarthquakeTrackerWeb.EarthquakeQueryController do
     parsed =
       case HTTPoison.get(url, headers, params: params) do
         {:ok, response} -> parse_eq_data(response)
-        {:error, reason} -> %{}
+        {:error, reason} -> IO.puts reason
+      end
+    if parsed do
+      %{:metadata => metadata, :features => features} = parsed
+      num_of_earthquakes = Map.get(metadata, "count")
+      earthquake_data = Enum.map features, fn eq ->
+        [long | [lat | [depth]]] = Map.get(Map.get(eq, "geometry"), "coordinates")
+        props = Map.get(eq, "properties")
+        %{mag: Map.get(props, "mag"), place: Map.get(props, "place"), time: Map.get(props, "time"),
+          mmi: Map.get(props, "mmi"), longitude: long, latitude: lat, depth: depth}
       end
 
-    IO.puts inspect(parsed)
-
-    conn
-    |> redirect(to: Routes.page_path(conn, :index))
+      conn
+      |> render("show.html", eq_data: earthquake_data, num_eq: num_of_earthquakes,
+           start_time: start_time, end_time: end_time)
+    else
+      conn
+      |> redirect(to: Routes.page_path(conn, :index))
+    end
   end
 
   defp parse_eq_data(data) do
