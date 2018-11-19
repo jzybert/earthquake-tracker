@@ -33,7 +33,7 @@
             <% else %>
               <%= form_for @conn, Routes.session_path(@conn, :create), [class: "form-inline"], fn f -> %>
                 <%= text_input f, :email, class: "form-control col-4", placeholder: "email", id: "email-input" %>
-                <%= text_input f, :password, class: "form-control col-4", placeholder: "password", id: "password-input" %>
+                <%= password_input f, :password, class: "form-control col-4", placeholder: "password", id: "password-input" %>
                 <%= submit "Login", class: "btn btn-link" %> |
                 <%= link "Register", to: Routes.user_path(@conn, :new), class: "btn btn-link" %>
               <% end %>
