@@ -57,5 +57,6 @@
       <%= render @view_module, @view_template, assigns %>
     </div>
     <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAWWCNo1QwAQKGBL4ZnbGbS3NITuryM-9U"></script>
   </body>
 </html>
