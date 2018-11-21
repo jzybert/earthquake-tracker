@@ -1,0 +1,30 @@
+<h1>All Earthquakes from <%= @start_time %> to <%= @end_time %></h1>
+
+<h3>Number of Earthquakes Queried: <%= @num_eq %></h3>
+
+<table class="table table-striped">
+  <thead class="thead-light">
+    <tr>
+      <th>Place</th>
+      <th>Time</th>
+      <th>Magnitude</th>
+      <th>MMI</th>
+      <th>Longitude</th>
+      <th>Latitude</th>
+      <th>Depth</th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for eq <- @eq_data do %>
+    <tr>
+      <td><%= eq.place %></td>
+      <td><%= case DateTime.from_unix(eq.time, :millisecond) do {:ok, time} -> time end %></td>
+      <td><%= eq.mag %></td>
+      <td><%= eq.mmi %></td>
+      <td><%= eq.longitude %></td>
+      <td><%= eq.latitude %></td>
+      <td><%= eq.depth %></td>
+    </tr>
+<% end %>
+  </tbody>
+</table>

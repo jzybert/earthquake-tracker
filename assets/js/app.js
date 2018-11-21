@@ -22,3 +22,19 @@ import _ from 'lodash';
 
 // import socket from "./socket"
 import socket from "./socket";
+
+$(() => {
+  $('#size-select').change(ev => {
+    let selectedValue = $('#size-select').find(":selected")[0].value;
+    if (selectedValue === 'circle') {
+      $('#circle-selected').css('display', 'flex');
+      $('#square-selected').css('display', 'none');
+    } else if (selectedValue === 'square') {
+      $('#circle-selected').css('display', 'none');
+      $('#square-selected').css('display', 'flex');
+    } else {
+      $('#circle-selected').css('display', 'none');
+      $('#square-selected').css('display', 'none');
+    }
+  });
+});

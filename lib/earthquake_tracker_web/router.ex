@@ -20,7 +20,9 @@ defmodule EarthquakeTrackerWeb.Router do
     get "/", PageController, :index
     resources "/users", UserController
     resources "/sessions", SessionController, only: [:create, :delete], singleton: true
+    resources "/query_earthquake", EarthquakeQueryController, only: [:show], singleton: true
     get "/query_earthquake", EarthquakeQueryController, :query_earthquake
+    post "/query_earthquake", EarthquakeQueryController, :query_earthquake
   end
 
   # Other scopes may use custom stacks.
