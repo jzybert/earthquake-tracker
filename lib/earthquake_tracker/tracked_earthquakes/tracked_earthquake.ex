@@ -9,6 +9,8 @@ defmodule EarthquakeTracker.TrackedEarthquakes.TrackedEarthquake do
     field :max_lng, :decimal, null: false
     field :min_lat, :decimal, null: false
     field :min_lng, :decimal, null: false
+    field :min_mag, :decimal
+    field :max_mag, :decimal
     field :name, :string, null: false
     field :user_id, :id, null: false
 
@@ -18,7 +20,7 @@ defmodule EarthquakeTracker.TrackedEarthquakes.TrackedEarthquake do
   @doc false
   def changeset(tracked_earthquake, attrs) do
     tracked_earthquake
-    |> cast(attrs, [:min_lat, :max_lat, :min_lng, :max_lng, :last_checked, :name, :user_id])
+    |> cast(attrs, [:min_lat, :max_lat, :min_lng, :max_lng, :last_checked, :name, :user_id, :min_mag, :max_mag])
     |> validate_required([:min_lat, :max_lat, :min_lng, :max_lng, :name, :user_id])
     |> unique_constraint(:name_user_id, [{:message, "Tracked areas must have unique names"}])
   end
