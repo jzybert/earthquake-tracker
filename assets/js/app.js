@@ -23,15 +23,15 @@ import _ from 'lodash';
 // import socket from "./socket"
 import socket from "./socket";
 
-var data = window.eq_data ? window.eq_data : [];
+let data = window.eq_data ? window.eq_data : [];
 
 console.log(data);
 
-$(function() {
-  var map;
+$(() => {
+  let map;
 
   /*
-  * Used to pass in the intitial data to be used.
+  * Used to pass in the initial data to be used.
   * Note: call this function on page load.
   */
   function initData(input) {
@@ -51,13 +51,13 @@ $(function() {
   * between all epicenters.
   */
   function getZoom(locations) {
-    if(locations.length <= 1) {
+    if (locations.length <= 1) {
       return 3;
     }
     // calculate the correct zoom.
     // 1. calculate all of the distances between the earthquakes, in miles.
-    var distances = [];
-    var temp_locations = locations.slice();
+    let distances = [];
+    let temp_locations = locations.slice();
     _.each(locations, (loc1) => {
       temp_locations.shift();
       _.each(temp_locations, (loc2) => {
@@ -65,9 +65,9 @@ $(function() {
       });
     });
     // 2. pick the biggest one.
-    var biggestDist = _.max(distances);
+    let biggestDist = _.max(distances);
     // 3. return the right zoom level based on the the biggest distance.
-    if(biggestDist < 60) { //90
+    if (biggestDist < 60) { //90
       return 10;
     } else if (biggestDist < 120) { //180
       return 9;
@@ -89,29 +89,29 @@ $(function() {
   * Used to find the distance between two locations on earth.
   */
   function haversine(a, b) {
-    var earth_radius = 6371e3; // meters
-    var lat_a = a.lat * (Math.PI / 180);
-    var lat_b = b.lat * (Math.PI / 180);
-    var lat_diff = (b.lat - a.lat) * (Math.PI / 180);
-    var lng_diff = (b.lng - a.lng) * (Math.PI / 180);
+    let earth_radius = 6371e3; // meters
+    let lat_a = a.lat * (Math.PI / 180);
+    let lat_b = b.lat * (Math.PI / 180);
+    let lat_diff = (b.lat - a.lat) * (Math.PI / 180);
+    let lng_diff = (b.lng - a.lng) * (Math.PI / 180);
 
-    var calc_1 = Math.sin(lat_diff/2) * Math.sin(lat_diff/2) +
+    let calc_1 = Math.sin(lat_diff/2) * Math.sin(lat_diff/2) +
                  Math.cos(lat_a) * Math.cos(lat_b) *
                  Math.sin(lng_diff/2) * Math.sin(lng_diff/2);
-    var calc_2 = 2 * Math.atan2(Math.sqrt(calc_1), Math.sqrt(1 - calc_1));
+    let calc_2 = 2 * Math.atan2(Math.sqrt(calc_1), Math.sqrt(1 - calc_1));
 
-    var answer = earth_radius * calc_2;
+    let answer = earth_radius * calc_2;
     return answer * 0.00062137; //convert to miles
   }
 
   /*
-  * Used to intitiate the map.
+  * Used to initialize the map.
   * Info:
   *   epicenter: {lat: float, lng: float}
   *   magnitude: Integer
   */
   function initMap(earthquakes) {
-    if(earthquakes == undefined || earthquakes.length == 0) {
+    if (earthquakes === undefined || earthquakes.length === 0) {
       map = new google.maps.Map($('#map')[0], {
         center: {
           lat: 0,
@@ -121,25 +121,25 @@ $(function() {
       });
     }
     else {
-      var mean_center = {
+      let mean_center = {
         lat: _.meanBy(earthquakes, function(eq) { return eq.epicenter.lat; }),
         lng: _.meanBy(earthquakes, function(eq) { return eq.epicenter.lng; })
-      }
+      };
 
-      var zoom = getZoom(_.map(earthquakes, 'epicenter'));
+      let zoom = getZoom(_.map(earthquakes, 'epicenter'));
 
       map = new google.maps.Map($('#map')[0], {
         center: mean_center,
         zoom: zoom
       });
 
-      for(var eq in earthquakes) {
-        var marker = new google.maps.Marker({
+      for (let eq in earthquakes) {
+        let marker = new google.maps.Marker({
           title: earthquakes[eq].magnitude.toString(),
           position: earthquakes[eq].epicenter,
           map: map
         });
-        var circle = new google.maps.Circle({
+        let circle = new google.maps.Circle({
           strokeColor: '#000000',
           strokeOpacity: 0.8,
           strokeWeight: 2,
@@ -167,7 +167,7 @@ $(function() {
     }
   });
 
-  $(document).ready(function() {
+  $(document).ready(() => {
     initData(data);
     initMap(data);
   });
