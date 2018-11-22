@@ -34,7 +34,7 @@
           <div class="col-4"></div>
           <div class="col-3">
             <p class="my-3">
-              <%= link(@current_user.email, to: Routes.user_path(@conn, :show, @current_user.id)) %> |
+              <%= link(@current_user.email, to: Routes.tracked_earthquake_path(@conn, :index, %{"id": @current_user.id})) %> |
               <%= link("Logout", to: Routes.session_path(@conn, :delete), method: :delete) %>
             </p>
           </div>
