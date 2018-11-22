@@ -1,30 +1,45 @@
-<h1>All Earthquakes from <%= @start_time %> to <%= @end_time %></h1>
+<div class="row">
+  <div class="col-12">
+    <div id="map"></div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-6">
+    <h1>All Earthquakes from <%= @start_time %> to <%= @end_time %></h1>
 
-<h3>Number of Earthquakes Queried: <%= @num_eq %></h3>
+    <h3>Number of Earthquakes Queried: <%= @num_eq %></h3>
 
-<table class="table table-striped">
-  <thead class="thead-light">
-    <tr>
-      <th>Place</th>
-      <th>Time</th>
-      <th>Magnitude</th>
-      <th>MMI</th>
-      <th>Longitude</th>
-      <th>Latitude</th>
-      <th>Depth</th>
-    </tr>
-  </thead>
-  <tbody>
-<%= for eq <- @eq_data do %>
-    <tr>
-      <td><%= eq.place %></td>
-      <td><%= case DateTime.from_unix(eq.time, :millisecond) do {:ok, time} -> time end %></td>
-      <td><%= eq.mag %></td>
-      <td><%= eq.mmi %></td>
-      <td><%= eq.longitude %></td>
-      <td><%= eq.latitude %></td>
-      <td><%= eq.depth %></td>
-    </tr>
-<% end %>
-  </tbody>
-</table>
+    <table class="table table-striped">
+      <thead class="thead-light">
+        <tr>
+          <th>Place</th>
+          <th>Time</th>
+          <th>Magnitude</th>
+          <th>MMI</th>
+          <th>Longitude</th>
+          <th>Latitude</th>
+          <th>Depth</th>
+        </tr>
+      </thead>
+      <tbody>
+    <%= for eq <- @eq_data do %>
+        <tr>
+          <td><%= eq.place %></td>
+          <td><%= case DateTime.from_unix(eq.time, :millisecond) do {:ok, time} -> time end %></td>
+          <td><%= eq.mag %></td>
+          <td><%= eq.mmi %></td>
+          <td><%= eq.longitude %></td>
+          <td><%= eq.latitude %></td>
+          <td><%= eq.depth %></td>
+        </tr>
+    <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<script>
+  // pass in the earthquake data to app.js
+  //TODO: this happens before the app.js loads.
+  window.eq_data = <%= raw Jason.encode!(@eq_data) %>;
+  console.log(window.eq_data);
+</script>
