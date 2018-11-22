@@ -23,16 +23,27 @@ import _ from 'lodash';
 // import socket from "./socket"
 import socket from "./socket";
 
+var data = window.eq_data ? window.eq_data : [];
+
+console.log(data);
+
 $(function() {
   var map;
-  var data = [];
 
   /*
   * Used to pass in the intitial data to be used.
   * Note: call this function on page load.
   */
   function initData(input) {
-    data = input;
+    data = _.map(input, (eq) => {
+      return {
+        epicenter: {
+          lat: eq.latitude,
+          lng: eq.longitude
+        },
+        magnitude: eq.mag
+      };
+    })
   }
 
   /*
@@ -124,7 +135,7 @@ $(function() {
 
       for(var eq in earthquakes) {
         var marker = new google.maps.Marker({
-          title: earthquakes[eq].magnitude,
+          title: earthquakes[eq].magnitude.toString(),
           position: earthquakes[eq].epicenter,
           map: map
         });
@@ -157,6 +168,7 @@ $(function() {
   });
 
   $(document).ready(function() {
+    initData(data);
     initMap(data);
   });
 });

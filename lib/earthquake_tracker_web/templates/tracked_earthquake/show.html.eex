@@ -1,0 +1,33 @@
+<h1>Area Tracked: <%= @tracked_earthquake.name %></h1>
+
+<ul>
+
+  <li>
+    <strong>Min lat:</strong>
+    <%= @tracked_earthquake.min_lat %>
+  </li>
+
+  <li>
+    <strong>Max lat:</strong>
+    <%= @tracked_earthquake.max_lat %>
+  </li>
+
+  <li>
+    <strong>Min lng:</strong>
+    <%= @tracked_earthquake.min_lng %>
+  </li>
+
+  <li>
+    <strong>Max lng:</strong>
+    <%= @tracked_earthquake.max_lng %>
+  </li>
+
+  <li>
+    <strong>Last checked:</strong>
+    <%= @tracked_earthquake.last_checked %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.tracked_earthquake_path(@conn, :edit, @tracked_earthquake), class: "btn btn-primary" %></span>
+<span><%= link "Back", to: Routes.tracked_earthquake_path(@conn, :index), class: "btn btn-secondary" %></span>
