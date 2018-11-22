@@ -4,7 +4,10 @@
   <thead class="thead-light">
     <tr>
       <th>Name</th>
-      <th>Info</th>
+      <th>Min Latitude</th>
+      <th>Max Latitude</th>
+      <th>Min Longitude</th>
+      <th>Max Longitude</th>
       <th></th>
     </tr>
   </thead>
@@ -13,8 +16,8 @@
       <tr>
         <td>
           <%= form_for @conn, Routes.earthquake_query_path(@conn, :query_earthquake), fn f -> %>
-            <%= hidden_input f, :start_time, value: "2038-01-01" %>
-            <%= hidden_input f, :end_time, value: "2038-01-01" %>
+            <%= hidden_input f, :start_time, value: Date.to_string(Date.add(Date.utc_today(), -1)) %>
+            <%= hidden_input f, :end_time, value: Date.to_string(Date.utc_today()) %>
             <%= hidden_input f, :location, value: "square" %>
             <%= hidden_input f, :sq_min_lat, value: t.min_lat %>
             <%= hidden_input f, :sq_max_lat, value: t.max_lat %>
@@ -26,8 +29,10 @@
             <%= submit t.name, class: "btn btn-link" %>
           <% end %>
         </td>
-        <td><b>min lat:</b>  <%= t.min_lat %>  <b>max lat:</b>  <%= t.max_lat %>
-          <b>min lng:</b>  <%= t.min_lng %>  <b>max lng:</b>  <%= t.max_lng %></td>
+        <td><%= t.min_lat %></td>
+        <td><%= t.max_lat %></td>
+        <td><%= t.min_lng %></td>
+        <td><%= t.max_lng %></td>
         <td>
           <%= link "Edit", to: Routes.tracked_earthquake_path(@conn, :edit, t), class: "btn btn-info btn-sm" %>
           <%= link "Delete", to: Routes.tracked_earthquake_path(@conn, :delete, t), method: :delete, data: [confirm: "Are you sure?"],

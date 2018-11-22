@@ -13,13 +13,6 @@ defmodule EarthquakeTrackerWeb.EarthquakeQueryController do
       "end_time" => end_time, "location" => location, "sq_min_lat" => sq_min_lat,
       "sq_max_lat" => sq_max_lat, "sq_min_lng" => sq_min_lng, "sq_max_lng" => sq_max_lng,
       "ci_lat" => ci_lat, "ci_lng" => ci_lng, "ci_max_rad" => ci_max_rad,}) do
-    end_time =
-      if end_time == "2038-01-01" do
-        DateTime.to_string(DateTime.utc_now())
-        # TODO: update start time to yesturday DateTime
-      else
-        end_time
-      end
     url = base_string() <> add_time(start_time, end_time)
     url =
       if location == "square" do
