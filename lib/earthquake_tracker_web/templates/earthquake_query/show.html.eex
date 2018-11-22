@@ -39,7 +39,6 @@
 </div>
 <script>
   // pass in the earthquake data to app.js
-  //TODO: this happens before the app.js loads.
   window.eq_data = <%= raw Jason.encode!(@eq_data) %>;
   console.log(window.eq_data);
 </script>

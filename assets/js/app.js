@@ -9,11 +9,12 @@ import css from "../css/app.scss"
 //
 // Import dependencies
 //
-import "phoenix_html"
+import 'phoenix_html'
 import jQuery from 'jquery';
 window.jQuery = window.$ = jQuery; // Bootstrap requires a global "$" object.
-import "bootstrap";
+import 'bootstrap';
 import _ from 'lodash';
+import moment from 'moment';
 
 // Import local files
 //
@@ -21,7 +22,7 @@ import _ from 'lodash';
 // paths "./socket" or full ones "web/static/js/socket".
 
 // import socket from "./socket"
-import socket from "./socket";
+import socket from './socket';
 
 let data = window.eq_data ? window.eq_data : [];
 
@@ -37,11 +38,14 @@ $(() => {
   function initData(input) {
     data = _.map(input, (eq) => {
       return {
+        place: eq.place,
+        time: moment(eq.time).format('llll'),
         epicenter: {
           lat: eq.latitude,
           lng: eq.longitude
         },
-        magnitude: eq.mag
+        magnitude: eq.mag,
+        depth: eq.depth
       };
     })
   }
@@ -134,10 +138,25 @@ $(() => {
       });
 
       for (let eq in earthquakes) {
+        let infowindow = new google.maps.InfoWindow({
+          content: '<div class="row">' +
+            '<div class="col-12">' +
+            '<h3>'+ earthquakes[eq].place +'</h3>' +
+            '<p><b>When:</b> '+ earthquakes[eq].time +'</p>' +
+            '<p><b>Magnitude:</b> '+ earthquakes[eq].magnitude +'</p>' +
+            '<p><b>Depth:</b> '+ earthquakes[eq].depth +'</p>' +
+            '<p><b>Latitude:</b> '+ earthquakes[eq].epicenter.lat +'</p>' +
+            '<p><b>Longitude:</b> '+ earthquakes[eq].epicenter.lng +'</p>' +
+            '</div>' +
+            '</div>'
+        });
         let marker = new google.maps.Marker({
           title: earthquakes[eq].magnitude.toString(),
           position: earthquakes[eq].epicenter,
           map: map
+        });
+        marker.addListener('click', function() {
+          infowindow.open(map, marker);
         });
         let circle = new google.maps.Circle({
           strokeColor: '#000000',
@@ -172,23 +191,3 @@ $(() => {
     initMap(data);
   });
 });
-
-/*
-example data:
-[
-  {
-    epicenter: {
-      lat: 20.40,
-      lng: 30.00
-    },
-    magnitude: 4
-  },
-  {
-    epicenter: {
-      lat: 24.30,
-      lng: 31.512
-    },
-    magnitude: 8
-  }
-]
-*/
