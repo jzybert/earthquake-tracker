@@ -4,7 +4,7 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-6">
+  <div class="col-12">
     <h1>All Earthquakes from <%= @start_time %> to <%= @end_time %></h1>
 
     <h3>Number of Earthquakes Queried: <%= @num_eq %></h3>

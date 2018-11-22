@@ -22,9 +22,10 @@ defmodule EarthquakeTrackerWeb.TrackedEarthquakeController do
   def create(conn, %{"tracked_earthquake" => tracked_earthquake_params}) do
     case TrackedEarthquakes.create_tracked_earthquake(tracked_earthquake_params) do
       {:ok, tracked_earthquake} ->
+        user_id = get_session(conn, :user_id)
         conn
         |> put_flash(:info, "Tracked earthquake created successfully.")
-        |> redirect(to: Routes.tracked_earthquake_path(conn, :show, tracked_earthquake))
+        |> redirect(to: Routes.tracked_earthquake_path(conn, :index, %{"id": user_id}))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)

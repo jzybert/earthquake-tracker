@@ -30,21 +30,24 @@
             <% end %>
           </ul>
         </div>
-        <div class="col-7">
-            <%= if @current_user do %>
-              <p class="my-3">
-                <%= link(@current_user.email, to: Routes.user_path(@conn, :show, @current_user.id)) %> |
-                <%= link("Logout", to: Routes.session_path(@conn, :delete), method: :delete) %>
-              </p>
-            <% else %>
-              <%= form_for @conn, Routes.session_path(@conn, :create), [class: "form-inline"], fn f -> %>
-                <%= text_input f, :email, class: "form-control col-4", placeholder: "email", id: "email-input" %>
-                <%= password_input f, :password, class: "form-control col-4", placeholder: "password", id: "password-input" %>
-                <%= submit "Login", class: "btn btn-link" %> |
-                <%= link "Register", to: Routes.user_path(@conn, :new), class: "btn btn-link" %>
-              <% end %>
+        <%= if @current_user do %>
+          <div class="col-4"></div>
+          <div class="col-3">
+            <p class="my-3">
+              <%= link(@current_user.email, to: Routes.tracked_earthquake_path(@conn, :index, %{"id": @current_user.id})) %> |
+              <%= link("Logout", to: Routes.session_path(@conn, :delete), method: :delete) %>
+            </p>
+          </div>
+        <% else %>
+          <div class="col-7">
+            <%= form_for @conn, Routes.session_path(@conn, :create), [class: "form-inline"], fn f -> %>
+              <%= text_input f, :email, class: "form-control col-4", placeholder: "email", id: "email-input" %>
+              <%= password_input f, :password, class: "form-control col-4", placeholder: "password", id: "password-input" %>
+              <%= submit "Login", class: "btn btn-link" %> |
+              <%= link "Register", to: Routes.user_path(@conn, :new), class: "btn btn-link" %>
             <% end %>
-        </div>
+          </div>
+        <% end %>
       </nav>
 
       <div class="row">
