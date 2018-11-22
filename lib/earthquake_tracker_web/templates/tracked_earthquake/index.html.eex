@@ -26,6 +26,8 @@
             <%= hidden_input f, :ci_lat %>
             <%= hidden_input f, :ci_lng %>
             <%= hidden_input f, :ci_max_rad %>
+            <%= hidden_input f, :min_mag %>
+            <%= hidden_input f, :max_mag %>
             <%= submit t.name, class: "btn btn-link" %>
           <% end %>
         </td>
