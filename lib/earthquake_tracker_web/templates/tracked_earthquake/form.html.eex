@@ -1,33 +1,42 @@
-<%= form_for @changeset, @action, fn f -> %>
-  <%= if @changeset.action do %>
-    <div class="alert alert-danger">
-      <p>Oops, something went wrong! Please check the errors below.</p>
-    </div>
-  <% end %>
+<div class="row">
+  <div class="col-12">
+    <%= form_for @changeset, @action, fn f -> %>
+      <%= if @changeset.action do %>
+        <div class="alert alert-danger">
+          <p>Oops, something went wrong! Please check the errors below.</p>
+        </div>
+      <% end %>
 
-  <%= label f, :name %>
-  <%= text_input f, :name, step: "any", class: "form-control", required: true %>
-  <%= error_tag f, :name %>
+      <%= hidden_input f, :user_id, step: "any", value: @current_user.id %>
 
-  <%= label f, :min_lat %>
-  <%= number_input f, :min_lat, step: "any", class: "form-control", required: true %>
-  <%= error_tag f, :min_lat %>
+      <div class="row">
+        <div class="form-group col-12">
+          <%= label f, :name %>
+          <%= text_input f, :name, class: "form-control", required: true %>
+          <%= error_tag f, :name %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-6">
+          <%= label f, "Minimum Latitude (default -90)", class: "control-label" %>
+          <%= number_input f, :min_lat, class: "form-control", value: -90, min: -90, max: 90 %>
+          <%= error_tag f, :min_lat %>
 
-  <%= label f, :max_lat %>
-  <%= number_input f, :max_lat, step: "any", class: "form-control", required: true %>
-  <%= error_tag f, :max_lat %>
+          <%= label f, "Maximum Latitude (default 90)", class: "control-label" %>
+          <%= number_input f, :max_lat, class: "form-control", value: 90, min: -90, max: 90 %>
+          <%= error_tag f, :max_lat %>
+        </div>
+        <div class="form-group col-6">
+          <%= label f, "Minimum Longitude (default -180)", class: "control-label" %>
+          <%= number_input f, :min_lng, class: "form-control", value: -180, min: -180, max: 180 %>
+          <%= error_tag f, :min_lng %>
 
-  <%= label f, :min_lng %>
-  <%= number_input f, :min_lng, step: "any", class: "form-control", required: true %>
-  <%= error_tag f, :min_lng %>
-
-  <%= label f, :max_lng %>
-  <%= number_input f, :max_lng, step: "any", class: "form-control", required: true %>
-  <%= error_tag f, :max_lng %>
-
-  <%= hidden_input f, :user_id, step: "any", value: @current_user.id %>
-
-  <div>
-    <%= submit "Save", class: "btn btn-primary" %>
+          <%= label f, "Maximum Longitude (default 180)", class: "control-label" %>
+          <%= number_input f, :max_lng, class: "form-control", value: 180, min: -180, max: 180 %>
+          <%= error_tag f, :max_lng %>
+        </div>
+      </div>
+      <%= submit "Create", class: "btn btn-primary" %>
+    <% end %>
   </div>
-<% end %>
+</div>
