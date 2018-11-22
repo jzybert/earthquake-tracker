@@ -2,23 +2,33 @@
 
 <ul class="list-group list-group-flush">
   <li class="list-group-item">
-    <strong>Min lat:</strong>
+    <strong>Min Latitude:</strong>
     <%= @tracked_earthquake.min_lat %>
   </li>
 
   <li class="list-group-item">
-    <strong>Max lat:</strong>
+    <strong>Max Latitude:</strong>
     <%= @tracked_earthquake.max_lat %>
   </li>
 
   <li class="list-group-item">
-    <strong>Min lng:</strong>
+    <strong>Min Longitude:</strong>
     <%= @tracked_earthquake.min_lng %>
   </li>
 
   <li class="list-group-item">
-    <strong>Max lng:</strong>
+    <strong>Max Longitude:</strong>
     <%= @tracked_earthquake.max_lng %>
+  </li>
+
+  <li class="list-group-item">
+    <strong>Min Magnitude:</strong>
+    <%= @tracked_earthquake.min_mag %>
+  </li>
+
+  <li class="list-group-item">
+    <strong>Max Magnitude:</strong>
+    <%= @tracked_earthquake.max_mag %>
   </li>
 </ul>
 

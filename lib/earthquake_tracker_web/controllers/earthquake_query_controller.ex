@@ -12,7 +12,9 @@ defmodule EarthquakeTrackerWeb.EarthquakeQueryController do
   def query_earthquake(conn, %{"start_time" => start_time,
       "end_time" => end_time, "location" => location, "sq_min_lat" => sq_min_lat,
       "sq_max_lat" => sq_max_lat, "sq_min_lng" => sq_min_lng, "sq_max_lng" => sq_max_lng,
-      "ci_lat" => ci_lat, "ci_lng" => ci_lng, "ci_max_rad" => ci_max_rad,}) do
+      "ci_lat" => ci_lat, "ci_lng" => ci_lng, "ci_max_rad" => ci_max_rad, "min_mag" => min_mag,
+      "max_mag" => max_mag}) do
+
     url = base_string() <> add_time(start_time, end_time)
     url =
       if location == "square" do
@@ -24,6 +26,15 @@ defmodule EarthquakeTrackerWeb.EarthquakeQueryController do
           url
         end
       end
+    url =
+      if min_mag != "" || max_mag != "" do
+        url <> add_magnitude(min_mag, max_mag)
+      else
+        url
+      end
+
+    IO.puts url
+
     headers = []
     params = []
 
@@ -72,5 +83,9 @@ defmodule EarthquakeTrackerWeb.EarthquakeQueryController do
 
   defp add_circle(lat, lng, rad) do
     "&latitude=" <> lat <> "&longitude=" <> lng <> "&maxradius=" <> rad
+  end
+
+  defp add_magnitude(min_mag, max_mag) do
+    "&minmagnitude=" <> min_mag <> "&maxmagnitude=" <> max_mag
   end
 end

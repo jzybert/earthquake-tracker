@@ -36,6 +36,18 @@
           <%= error_tag f, :max_lng %>
         </div>
       </div>
+      <div class="row">
+        <div class="form-group col-6">
+          <%= label f, "Minimum Magnitude", class: "control-label" %>
+          <%= number_input f, :min_mag, class: "form-control", step: "any", required: false %>
+          <%= error_tag f, :min_mag %>
+        </div>
+        <div class="form-group col-6">
+          <%= label f, "Maximum Magnitude", class: "control-label" %>
+          <%= number_input f, :max_mag, class: "form-control", step: "any", required: false %>
+          <%= error_tag f, :max_mag %>
+        </div>
+      </div>
       <%= submit "Create", class: "btn btn-primary" %>
     <% end %>
   </div>

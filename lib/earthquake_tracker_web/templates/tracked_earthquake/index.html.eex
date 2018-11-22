@@ -8,6 +8,8 @@
       <th>Max Latitude</th>
       <th>Min Longitude</th>
       <th>Max Longitude</th>
+      <th>Min Magnitude</th>
+      <th>Max Magnitude</th>
       <th></th>
     </tr>
   </thead>
@@ -26,6 +28,8 @@
             <%= hidden_input f, :ci_lat %>
             <%= hidden_input f, :ci_lng %>
             <%= hidden_input f, :ci_max_rad %>
+            <%= hidden_input f, :min_mag, value: t.min_mag %>
+            <%= hidden_input f, :max_mag, value: t.max_mag %>
             <%= submit t.name, class: "btn btn-link" %>
           <% end %>
         </td>
@@ -33,6 +37,8 @@
         <td><%= t.max_lat %></td>
         <td><%= t.min_lng %></td>
         <td><%= t.max_lng %></td>
+        <td><%= t.min_mag %></td>
+        <td><%= t.max_mag %></td>
         <td>
           <%= link "Edit", to: Routes.tracked_earthquake_path(@conn, :edit, t), class: "btn btn-info btn-sm" %>
           <%= link "Delete", to: Routes.tracked_earthquake_path(@conn, :delete, t), method: :delete, data: [confirm: "Are you sure?"],
