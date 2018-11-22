@@ -4,13 +4,13 @@ defmodule EarthquakeTracker.TrackedEarthquakes.TrackedEarthquake do
 
 
   schema "tracked_earthquakes" do
-    field :last_checked, :naive_datetime
-    field :max_lat, :decimal
-    field :max_lng, :decimal
-    field :min_lat, :decimal
-    field :min_lng, :decimal
-    field :name, :string
-    field :user_id, :id
+    field :last_checked, :naive_datetime, null: false
+    field :max_lat, :decimal, null: false
+    field :max_lng, :decimal, null: false
+    field :min_lat, :decimal, null: false
+    field :min_lng, :decimal, null: false
+    field :name, :string, null: false
+    field :user_id, :id, null: false
 
     timestamps()
   end
@@ -20,5 +20,6 @@ defmodule EarthquakeTracker.TrackedEarthquakes.TrackedEarthquake do
     tracked_earthquake
     |> cast(attrs, [:min_lat, :max_lat, :min_lng, :max_lng, :last_checked, :name, :user_id])
     |> validate_required([:min_lat, :max_lat, :min_lng, :max_lng, :name, :user_id])
+    |> unique_constraint(:name_user_id, [{:message, "Tracked areas must have unique names"}])
   end
 end
