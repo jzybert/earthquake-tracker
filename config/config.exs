@@ -44,7 +44,7 @@ end
 
 config :earthquake_tracker, EarthquakeTracker.Mailer,
   adapter: Bamboo.SMTPAdapter,
-  server: "email-smtp.us-east-1.amazonaws.com",
+  server: "in-v3.mailjet.com",
   port: 25,
   username: get_secret.("smtp_username"),
   password: get_secret.("smtp_password"),
