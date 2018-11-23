@@ -20,7 +20,7 @@ defmodule EarthquakeTracker.MixProject do
   def application do
     [
       mod: {EarthquakeTracker.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :bamboo]
     ]
   end
 
@@ -46,7 +46,9 @@ defmodule EarthquakeTracker.MixProject do
       {:httpoison, "~>1.4"},
       {:poison, "~>3.0"},
       {:comeonin, "~> 4.1"},
-      {:argon2_elixir, "~> 1.3"}
+      {:argon2_elixir, "~> 1.3"},
+      {:bamboo, "~> 1.1.0"},
+      {:bamboo_smtp, "~> 1.6.0"}
     ]
   end
 
