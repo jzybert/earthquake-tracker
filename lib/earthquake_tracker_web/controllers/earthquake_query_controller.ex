@@ -18,7 +18,10 @@ defmodule EarthquakeTrackerWeb.EarthquakeQueryController do
       try do
         tracked = TrackedEarthquakes.list_tracked_earthquakes_by_user(id)
         queries = query_for_each_tracked(tracked)
-        Email.tracked_area_email(email_address, hd queries) |> Mailer.deliver_now
+        # Send email for each tracked query
+        Enum.each queries, fn query ->
+          Email.tracked_area_email(email_address, query) |> Mailer.deliver_later
+        end
         conn
         |> redirect(to: Routes.page_path(conn, :index))
       rescue
