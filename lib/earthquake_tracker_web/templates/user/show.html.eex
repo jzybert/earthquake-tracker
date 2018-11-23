@@ -4,6 +4,13 @@
   <h3>Non-Admin: <%= @user.email %></h3>
 <% end %>
 
+<h4>User Settings:</h4>
+
+<div>
+  <%= link("Send Email",
+      to: Routes.earthquake_query_path(@conn, :send_email, %{"email_address": @user.email})) %>
+</div>
+
 <span><%= link "Edit", to: Routes.user_path(@conn, :edit, @user), class: "btn btn-primary" %></span>
 
 <span><%= link "Back", to: Routes.user_path(@conn, :index), class: "btn btn-secondary" %></span>
