@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no, user-scalable=no"/>
+    <title>Earthquake Tracker</title>
+  </head>
+  <body>
+    <h2>Tracked Area: <%= @name %></h2>
+    <p>Number of earthquakes: <%= @num_eq %></p>
+
+    <table class="table table-striped">
+      <thead class="thead-light">
+        <tr>
+          <th>Place</th>
+          <th>Time</th>
+          <th>Magnitude</th>
+          <th>MMI</th>
+          <th>Longitude</th>
+          <th>Latitude</th>
+          <th>Depth</th>
+        </tr>
+      </thead>
+      <tbody>
+      <%= for eq <- @eq_data do %>
+        <tr>
+          <td><%= eq.place %></td>
+          <td><%= case DateTime.from_unix(eq.time, :millisecond) do {:ok, time} -> time end %></td>
+          <td><%= eq.mag %></td>
+          <td><%= eq.mmi %></td>
+          <td><%= eq.longitude %></td>
+          <td><%= eq.latitude %></td>
+          <td><%= eq.depth %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </body>
+</html>

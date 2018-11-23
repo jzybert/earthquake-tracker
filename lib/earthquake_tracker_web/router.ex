@@ -24,6 +24,7 @@ defmodule EarthquakeTrackerWeb.Router do
     resources "/query_earthquake", EarthquakeQueryController, only: [:show], singleton: true
     get "/query_earthquake", EarthquakeQueryController, :query_earthquake
     post "/query_earthquake", EarthquakeQueryController, :query_earthquake
+    get "/query_earthquake/send_email", EarthquakeQueryController, :send_email
   end
 
   # Other scopes may use custom stacks.

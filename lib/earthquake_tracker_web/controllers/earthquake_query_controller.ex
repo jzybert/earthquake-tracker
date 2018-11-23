@@ -15,6 +15,24 @@ defmodule EarthquakeTrackerWeb.EarthquakeQueryController do
       "ci_lat" => ci_lat, "ci_lng" => ci_lng, "ci_max_rad" => ci_max_rad, "min_mag" => min_mag,
       "max_mag" => max_mag}) do
 
+    data = query_eq_data(start_time,  end_time, location, sq_min_lat, sq_max_lat, sq_min_lng,
+      sq_max_lng, ci_lat, ci_lng, ci_max_rad, min_mag, max_mag)
+
+    earthquake_data = Map.get(data, :earthquake_data)
+    num_of_earthquakes = Map.get(data, :num_of_earthquakes)
+
+    if num_of_earthquakes != -1 do
+      conn
+      |> render("show.html", eq_data: earthquake_data, num_eq: num_of_earthquakes,
+           start_time: start_time, end_time: end_time)
+    else
+      conn
+      |> redirect(to: Routes.page_path(conn, :index))
+    end
+  end
+
+  def query_eq_data(start_time, end_time, location, sq_min_lat, sq_max_lat, sq_min_lng, sq_max_lng,
+         ci_lat, ci_lng, ci_max_rad, min_mag, max_mag) do
     url = base_string() <> add_time(start_time, end_time)
     url =
       if location == "square" do
@@ -33,8 +51,6 @@ defmodule EarthquakeTrackerWeb.EarthquakeQueryController do
         url
       end
 
-    IO.puts url
-
     headers = []
     params = []
 
@@ -43,6 +59,7 @@ defmodule EarthquakeTrackerWeb.EarthquakeQueryController do
         {:ok, response} -> parse_eq_data(response)
         {:error, reason} -> IO.puts reason
       end
+
     if parsed do
       %{:metadata => metadata, :features => features} = parsed
       num_of_earthquakes = Map.get(metadata, "count")
@@ -52,13 +69,9 @@ defmodule EarthquakeTrackerWeb.EarthquakeQueryController do
         %{mag: Map.get(props, "mag"), place: Map.get(props, "place"), time: Map.get(props, "time"),
           mmi: Map.get(props, "mmi"), longitude: long, latitude: lat, depth: depth}
       end
-
-      conn
-      |> render("show.html", eq_data: earthquake_data, num_eq: num_of_earthquakes,
-           start_time: start_time, end_time: end_time)
+      %{earthquake_data: earthquake_data, num_of_earthquakes: num_of_earthquakes}
     else
-      conn
-      |> redirect(to: Routes.page_path(conn, :index))
+      %{earthquake_data: [], num_of_earthquakes: -1}
     end
   end
 
@@ -67,7 +80,7 @@ defmodule EarthquakeTrackerWeb.EarthquakeQueryController do
     data_part = elem(decoded_data, 1)
     metadata = Map.get(data_part, "metadata")
     features = Map.get(data_part, "features")
-    %{"metadata": metadata, "features": features}
+    %{metadata: metadata, features: features}
   end
 
   defp base_string(), do: "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson"

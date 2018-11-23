@@ -14,6 +14,7 @@ defmodule EarthquakeTracker.Application do
       EarthquakeTrackerWeb.Endpoint,
       # Starts a worker by calling: EarthquakeTracker.Worker.start_link(arg)
       # {EarthquakeTracker.Worker, arg},
+      EarthquakeTracker.AutomateEmails
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

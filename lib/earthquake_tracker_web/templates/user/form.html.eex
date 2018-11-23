@@ -23,6 +23,12 @@
     <%= error_tag f, :password_confirmation %>
   </div>
 
+  <div class="form-group">
+    <%= label f, "Opt-in to Email Notifications", class: "control-label" %>
+    <%= checkbox f, :email_notifications, class: "form-control" %>
+    <%= error_tag f, :email_notifications %>
+  </div>
+
   <div>
     <%= submit "Create User", class: "btn btn-primary" %>
   </div>

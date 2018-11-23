@@ -6,6 +6,7 @@ defmodule EarthquakeTracker.Users.User do
   schema "users" do
     field :admin, :boolean, default: false, null: false
     field :email, :string, null: false
+    field :email_notifications, :boolean, default: false, null: false
 
     field :password_hash, :string
     field :pw_last_try, :utc_datetime
@@ -20,7 +21,7 @@ defmodule EarthquakeTracker.Users.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:email, :admin, :password, :password_confirmation])
+    |> cast(attrs, [:email, :admin, :password, :password_confirmation, :email_notifications])
     |> validate_confirmation(:password)
     |> validate_password(:password)
     |> put_pass_hash()

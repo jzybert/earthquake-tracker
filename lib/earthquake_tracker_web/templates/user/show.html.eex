@@ -4,6 +4,19 @@
   <h3>Non-Admin: <%= @user.email %></h3>
 <% end %>
 
+<h4>User Settings:</h4>
+
+<form>
+  <div class="form-check">
+    <%= if @user.email_notifications do %>
+      <input type="checkbox" class="form-check-input" id="email-notify" disabled checked>
+    <% else %>
+      <input type="checkbox" class="form-check-input" id="email-notify" disabled>
+    <% end %>
+    <label class="form-check-label" for="email-notify">Email Notifications</label>
+  </div>
+</form>
+
 <span><%= link "Edit", to: Routes.user_path(@conn, :edit, @user), class: "btn btn-primary" %></span>
 
 <span><%= link "Back", to: Routes.user_path(@conn, :index), class: "btn btn-secondary" %></span>
