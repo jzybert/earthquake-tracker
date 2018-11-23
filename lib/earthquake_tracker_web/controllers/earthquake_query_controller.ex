@@ -80,7 +80,7 @@ defmodule EarthquakeTrackerWeb.EarthquakeQueryController do
     data_part = elem(decoded_data, 1)
     metadata = Map.get(data_part, "metadata")
     features = Map.get(data_part, "features")
-    %{"metadata": metadata, "features": features}
+    %{metadata: metadata, features: features}
   end
 
   defp base_string(), do: "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson"
