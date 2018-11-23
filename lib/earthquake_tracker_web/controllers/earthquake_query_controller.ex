@@ -1,39 +1,12 @@
 defmodule EarthquakeTrackerWeb.EarthquakeQueryController do
   use EarthquakeTrackerWeb, :controller
 
-  alias EarthquakeTracker.Email
-  alias EarthquakeTracker.Mailer
-  alias EarthquakeTracker.TrackedEarthquakes
-
   def index(conn, _params) do
     render(conn, "index.html")
   end
 
   def show(conn, %{"eq_data" => eq_data, "num_eq" => num_eq, "start_time" => start_time, "end_time" => end_time}) do
     render(conn, "show.html", eq_data: eq_data, num_eq: num_eq, start_time: start_time, end_time: end_time)
-  end
-
-  def send_email(conn, %{"email_address" => email_address, "opted_in" => opted_in, "id" => id}) do
-    if opted_in == "true" do
-      try do
-        tracked = TrackedEarthquakes.list_tracked_earthquakes_by_user(id)
-        queries = query_for_each_tracked(tracked)
-        # Send email for each tracked query
-        Enum.each queries, fn query ->
-          Email.tracked_area_email(email_address, query) |> Mailer.deliver_later
-        end
-        conn
-        |> redirect(to: Routes.page_path(conn, :index))
-      rescue
-        e in Bamboo.SMTPAdapter.SMTPError ->
-          conn
-          |> put_flash(:error, "Failed to send email via AWS.")
-          |> redirect(to: Routes.page_path(conn, :index))
-      end
-    else
-      conn
-      |> redirect(to: Routes.page_path(conn, :index))
-    end
   end
 
   def query_earthquake(conn, %{"start_time" => start_time,
@@ -58,7 +31,7 @@ defmodule EarthquakeTrackerWeb.EarthquakeQueryController do
     end
   end
 
-  defp query_eq_data(start_time, end_time, location, sq_min_lat, sq_max_lat, sq_min_lng, sq_max_lng,
+  def query_eq_data(start_time, end_time, location, sq_min_lat, sq_max_lat, sq_min_lng, sq_max_lng,
          ci_lat, ci_lng, ci_max_rad, min_mag, max_mag) do
     url = base_string() <> add_time(start_time, end_time)
     url =
@@ -127,23 +100,5 @@ defmodule EarthquakeTrackerWeb.EarthquakeQueryController do
 
   defp add_magnitude(min_mag, max_mag) do
     "&minmagnitude=" <> min_mag <> "&maxmagnitude=" <> max_mag
-  end
-
-  defp query_for_each_tracked(tracked) do
-    queried_data = Enum.map(tracked, fn area ->
-      %{:max_lat => sq_max_lat, :max_lng => sq_max_lng, :min_lat => sq_min_lat, :min_lng => sq_min_lng,
-        :max_mag => max_mag, :min_mag => min_mag, :name => name, :last_checked => last_checked} = area
-      location = "square"
-      start_time = Date.to_string(Date.add(Date.utc_today(), -1))
-      end_time = Date.to_string(Date.utc_today())
-      min_mag = if min_mag, do: Decimal.to_string(min_mag), else: ""
-      max_mag = if max_mag, do: Decimal.to_string(max_mag), else: ""
-      data = query_eq_data(start_time, end_time, location, Decimal.to_string(sq_min_lat),
-        Decimal.to_string(sq_max_lat), Decimal.to_string(sq_min_lng),
-        Decimal.to_string(sq_max_lng), "", "", "", min_mag, max_mag)
-      %{earthquake_data: earthquake_data, num_of_earthquakes: num_of_earthquakes} = data
-      %{name: name, eq_data: earthquake_data, num_eq: num_of_earthquakes}
-    end)
-    queried_data
   end
 end
