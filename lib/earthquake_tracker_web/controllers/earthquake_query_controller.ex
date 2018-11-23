@@ -3,6 +3,7 @@ defmodule EarthquakeTrackerWeb.EarthquakeQueryController do
 
   alias EarthquakeTracker.Email
   alias EarthquakeTracker.Mailer
+  alias EarthquakeTracker.TrackedEarthquakes
 
   def index(conn, _params) do
     render(conn, "index.html")
@@ -12,10 +13,12 @@ defmodule EarthquakeTrackerWeb.EarthquakeQueryController do
     render(conn, "show.html", eq_data: eq_data, num_eq: num_eq, start_time: start_time, end_time: end_time)
   end
 
-  def send_email(conn, %{"email_address" => email_address, "opted_in" => opted_in}) do
+  def send_email(conn, %{"email_address" => email_address, "opted_in" => opted_in, "id" => id}) do
     if opted_in == "true" do
       try do
-        Email.tracked_area_email(email_address) |> Mailer.deliver_now
+        tracked = TrackedEarthquakes.list_tracked_earthquakes_by_user(id)
+        queries = query_for_each_tracked(tracked)
+        Email.tracked_area_email(email_address, hd queries) |> Mailer.deliver_now
         conn
         |> redirect(to: Routes.page_path(conn, :index))
       rescue
@@ -36,6 +39,24 @@ defmodule EarthquakeTrackerWeb.EarthquakeQueryController do
       "ci_lat" => ci_lat, "ci_lng" => ci_lng, "ci_max_rad" => ci_max_rad, "min_mag" => min_mag,
       "max_mag" => max_mag}) do
 
+    data = query_eq_data(start_time,  end_time, location, sq_min_lat, sq_max_lat, sq_min_lng,
+      sq_max_lng, ci_lat, ci_lng, ci_max_rad, min_mag, max_mag)
+
+    earthquake_data = Map.get(data, :earthquake_data)
+    num_of_earthquakes = Map.get(data, :num_of_earthquakes)
+
+    if num_of_earthquakes != -1 do
+      conn
+      |> render("show.html", eq_data: earthquake_data, num_eq: num_of_earthquakes,
+           start_time: start_time, end_time: end_time)
+    else
+      conn
+      |> redirect(to: Routes.page_path(conn, :index))
+    end
+  end
+
+  defp query_eq_data(start_time, end_time, location, sq_min_lat, sq_max_lat, sq_min_lng, sq_max_lng,
+         ci_lat, ci_lng, ci_max_rad, min_mag, max_mag) do
     url = base_string() <> add_time(start_time, end_time)
     url =
       if location == "square" do
@@ -62,6 +83,7 @@ defmodule EarthquakeTrackerWeb.EarthquakeQueryController do
         {:ok, response} -> parse_eq_data(response)
         {:error, reason} -> IO.puts reason
       end
+
     if parsed do
       %{:metadata => metadata, :features => features} = parsed
       num_of_earthquakes = Map.get(metadata, "count")
@@ -71,13 +93,9 @@ defmodule EarthquakeTrackerWeb.EarthquakeQueryController do
         %{mag: Map.get(props, "mag"), place: Map.get(props, "place"), time: Map.get(props, "time"),
           mmi: Map.get(props, "mmi"), longitude: long, latitude: lat, depth: depth}
       end
-
-      conn
-      |> render("show.html", eq_data: earthquake_data, num_eq: num_of_earthquakes,
-           start_time: start_time, end_time: end_time)
+      %{earthquake_data: earthquake_data, num_of_earthquakes: num_of_earthquakes}
     else
-      conn
-      |> redirect(to: Routes.page_path(conn, :index))
+      %{earthquake_data: [], num_of_earthquakes: -1}
     end
   end
 
@@ -106,5 +124,23 @@ defmodule EarthquakeTrackerWeb.EarthquakeQueryController do
 
   defp add_magnitude(min_mag, max_mag) do
     "&minmagnitude=" <> min_mag <> "&maxmagnitude=" <> max_mag
+  end
+
+  defp query_for_each_tracked(tracked) do
+    queried_data = Enum.map(tracked, fn area ->
+      %{:max_lat => sq_max_lat, :max_lng => sq_max_lng, :min_lat => sq_min_lat, :min_lng => sq_min_lng,
+        :max_mag => max_mag, :min_mag => min_mag, :name => name, :last_checked => last_checked} = area
+      location = "square"
+      start_time = Date.to_string(Date.add(Date.utc_today(), -1))
+      end_time = Date.to_string(Date.utc_today())
+      min_mag = if min_mag, do: Decimal.to_string(min_mag), else: ""
+      max_mag = if max_mag, do: Decimal.to_string(max_mag), else: ""
+      data = query_eq_data(start_time, end_time, location, Decimal.to_string(sq_min_lat),
+        Decimal.to_string(sq_max_lat), Decimal.to_string(sq_min_lng),
+        Decimal.to_string(sq_max_lng), "", "", "", min_mag, max_mag)
+      %{earthquake_data: earthquake_data, num_of_earthquakes: num_of_earthquakes} = data
+      %{name: name, eq_data: earthquake_data, num_eq: num_of_earthquakes}
+    end)
+    queried_data
   end
 end
