@@ -1,12 +1,19 @@
 defmodule EarthquakeTrackerWeb.EarthquakeQueryController do
   use EarthquakeTrackerWeb, :controller
 
+  alias EarthquakeTracker.Email
+  alias EarthquakeTracker.Mailer
+
   def index(conn, _params) do
     render(conn, "index.html")
   end
 
   def show(conn, %{"eq_data" => eq_data, "num_eq" => num_eq, "start_time" => start_time, "end_time" => end_time}) do
     render(conn, "show.html", eq_data: eq_data, num_eq: num_eq, start_time: start_time, end_time: end_time)
+  end
+
+  def send_email(email_address) do
+    Email.tracked_area_email(email_address) |> Mailer.deliver_now
   end
 
   def query_earthquake(conn, %{"start_time" => start_time,
