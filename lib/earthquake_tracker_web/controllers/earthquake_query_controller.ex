@@ -12,16 +12,21 @@ defmodule EarthquakeTrackerWeb.EarthquakeQueryController do
     render(conn, "show.html", eq_data: eq_data, num_eq: num_eq, start_time: start_time, end_time: end_time)
   end
 
-  def send_email(conn, %{"email_address" => email_address}) do
-    try do
-      Email.tracked_area_email(email_address) |> Mailer.deliver_now
+  def send_email(conn, %{"email_address" => email_address, "opted_in" => opted_in}) do
+    if opted_in == "true" do
+      try do
+        Email.tracked_area_email(email_address) |> Mailer.deliver_now
+        conn
+        |> redirect(to: Routes.page_path(conn, :index))
+      rescue
+        e in Bamboo.SMTPAdapter.SMTPError ->
+          conn
+          |> put_flash(:error, "Failed to send email via AWS.")
+          |> redirect(to: Routes.page_path(conn, :index))
+      end
+    else
       conn
       |> redirect(to: Routes.page_path(conn, :index))
-    rescue
-      e in Bamboo.SMTPAdapter.SMTPError ->
-        conn
-        |> put_flash(:error, "Failed to send email via AWS.")
-        |> redirect(to: Routes.page_path(conn, :index))
     end
   end
 
