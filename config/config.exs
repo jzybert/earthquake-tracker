@@ -30,3 +30,24 @@ config :ecto, :json_library, Jason
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"
+
+get_secret = fn name ->
+  base = Path.expand("~/.config/earthquake_tracker")
+  File.mkdir_p!(base)
+  path = Path.join(base, name)
+  unless File.exists?(path) do
+    secret = Base.encode16(:crypto.strong_rand_bytes(32))
+    File.write!(path, secret)
+  end
+  String.trim(File.read!(path))
+end
+
+config :earthquake_tracker, EarthquakeTracker.Mailer,
+  adapter: Bamboo.SMTPAdapter,
+  server: "email-smtp.us-east-1.amazonaws.com",
+  port: 465,
+  username: get_secret.("smtp_username"),
+  password: get_secret.("smtp_password"),
+  tls: :always,
+  ssl: false,
+  retries: 1
