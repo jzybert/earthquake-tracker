@@ -6,6 +6,17 @@
 
 <h4>User Settings:</h4>
 
+<form>
+  <div class="form-check">
+    <%= if @user.email_notifications do %>
+      <input type="checkbox" class="form-check-input" id="email-notify" disabled checked>
+    <% else %>
+      <input type="checkbox" class="form-check-input" id="email-notify" disabled>
+    <% end %>
+    <label class="form-check-label" for="email-notify">Email Notifications</label>
+  </div>
+</form>
+
 <div>
   <%= link("Send Email",
       to: Routes.earthquake_query_path(@conn, :send_email, %{"email_address": @user.email})) %>

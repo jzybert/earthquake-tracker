@@ -8,6 +8,7 @@ defmodule EarthquakeTracker.Repo.Migrations.CreateUsers do
       add :password_hash, :string
       add :pw_tries, :integer, null: false, default: 0
       add :pw_last_try, :utc_datetime
+      add :email_notifications, :boolean, default: false, null: false
 
       timestamps()
     end
