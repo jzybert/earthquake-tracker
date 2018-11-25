@@ -51,3 +51,6 @@ config :earthquake_tracker, EarthquakeTracker.Mailer,
   tls: :if_available,
   ssl: false,
   retries: 1
+
+config :earthquake_tracker, News,
+  news_api_key: get_secret.("news_api_key")
