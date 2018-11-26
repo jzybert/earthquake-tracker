@@ -5,7 +5,8 @@ defmodule EarthquakeTrackerWeb.TrackedEarthquakeController do
   alias EarthquakeTracker.TrackedEarthquakes.TrackedEarthquake
 
   def index(conn, %{"id" => id}) do
-    tracked_earthquakes = TrackedEarthquakes.list_tracked_earthquakes_by_user(id)
+    user_id = Integer.to_string(get_session(conn, :user_id))
+    tracked_earthquakes = if user_id == id, do: TrackedEarthquakes.list_tracked_earthquakes_by_user(id), else: []
     render(conn, "index.html", tracked_earthquakes: tracked_earthquakes)
   end
 
