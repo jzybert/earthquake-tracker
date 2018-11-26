@@ -65,7 +65,7 @@ valuable to those who have a need to view earthquake information quickly
 and efficiently.
 
 ### Project requirements?
-#### In general, this application should be significantly more ambitious and have more features and functions than either the memory game or the task tracker app.
+#### More ambitious than previous homework.
 Our application is much more ambitious than the previous homework assignments. 
 Not only do we have forms for user's to enter data and multiple databases like 
 the previous homework, but we've incorporated email, multiple APIs, and 
@@ -87,25 +87,25 @@ It is deployed to our VPSs.
 The majority of our application is self-hosted on our VPS. The only thing 
 that isn't is SMTP server for which we're using Mailjet.
 
-#### Your application should have user accounts, and should support local password authentication (implemented securely).
+#### User accounts w/ secure password authentication.
 Users are able to register accounts with passwords stored in the user 
 database. We are using the correct and secure password authentication 
 methods that we learned in class.
 
-#### Users should be stored in a Postgres database, along with some other persistent state.
+#### Users should be stored in a Postgres database, along with state.
 Users are stored in a Postgres database. We also stored tracked areas for 
 earthquake areas which are associated with a user.
 
-#### Your application should use an external API that requires authentication of your app, your app's user, or both.
+#### Your application should use an external API that requires authentication.
 Our application authenticates with a news API which we use to display 
 earthquake data to users.
 
-#### Any API access should be server <-> server. Your browser code should only make requests to your server, not remote APIs.
+#### Any API access should be server <-> server.
 We use two APIs that achieve this. The first is the USGS Earthquake 
 Catalog API which we get earthquake data from for user queries. The second 
 is a Google Maps API which we display pins with earthquake information.
 
-#### Your application should use Phoenix Channels to push real-time updates to users, triggered either from an external API or from actions by other concurrent users.
+#### Your app should use Phoenix Channels to push real-time updates to users.
 Our application uses Phoenix Channels to send real-time updates to users about 
 earthquake news which we get from the news API. There is a News tab in the 
 navigation bar where periodically gets news about earthquakes. We use channels
