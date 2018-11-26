@@ -3,6 +3,8 @@ defmodule EarthquakeTrackerWeb.NewsQueryController do
 
   def index(conn, _params) do
     articles = query_news(conn)
+    IO.puts("\n[DATE]\n#{Date.to_string(Date.add(Date.utc_today(), -7))}\n")
+    IO.puts("\n[ARTICLES]\n#{inspect(articles)}\n")
     render(conn, "index.html", articles: articles)
   end
 
@@ -13,7 +15,8 @@ defmodule EarthquakeTrackerWeb.NewsQueryController do
     num_of_articles = Map.get(data, :num_of_articles)
 
     if num_of_articles != -1 do
-      Enum.filter(articles, fn article -> String.downcase(article.title) =~ "earthquake" end)
+      Enum.filter(articles, fn article -> String.downcase(article.title) =~ "earthquake" ||
+        String.downcase(article.description) =~ "earthquake" end)
     else
       conn
       |> redirect(to: Routes.page_path(conn, :index))
@@ -21,8 +24,8 @@ defmodule EarthquakeTrackerWeb.NewsQueryController do
   end
 
   def query_news_data() do
-    url = "https://newsapi.org/v2/everything?q=earthquake&from=" <> Date.to_string(Date.utc_today()) <>
-          "&sortBy=popularity&apiKey=" <> Application.get_env(:earthquake_tracker, News)[:news_api_key]
+    url = "https://newsapi.org/v2/everything?q=earthquake&from=" <> Date.to_string(Date.add(Date.utc_today(), -7)) <>
+          "&sortBy=relevancy&pageSize=100&apiKey=" <> Application.get_env(:earthquake_tracker, News)[:news_api_key]
 
     headers = []
     params = []
@@ -38,9 +41,10 @@ defmodule EarthquakeTrackerWeb.NewsQueryController do
       num_of_articles = length(articles)
       article_data = Enum.map articles, fn article ->
         source = Map.get(Map.get(article, "source"), "name")
+        {:ok, date, i} = DateTime.from_iso8601(Map.get(article, "publishedAt"))
         %{author: Map.get(article, "author"), title: Map.get(article, "title"),
           description: Map.get(article, "description"), url: Map.get(article, "url"),
-          url_to_image: Map.get(article, "urlToImage"), published_at: Map.get(article, "publishedAt"),
+          url_to_image: Map.get(article, "urlToImage"), published_at: "#{date.month}/#{date.day}/#{date.year}",
           source: source}
       end
       %{article_data: article_data, num_of_articles: num_of_articles}
