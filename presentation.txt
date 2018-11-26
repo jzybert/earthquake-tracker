@@ -1,1 +1,26 @@
 Notes for our presentation in class:
+
+We'll explain what our app does:
+- we built an earthquake tracker app which allows for users to query dates and
+  longitude/latitude to see what earthquakes occurred within those parameters
+- any data retrieved is shown in both a table and a Google Map
+- users can also specify areas they want tracked and receive email updates
+  about those areas
+- News tab which displays news about earthquakes
+
+What we want to show for live demo:
+- show a query of the USGS database using dates/ranges
+  - click on some pins to show earthquakes
+- show a tracked area
+- show the news tab
+
+Talk about libraries and tools we used:
+- HTTPoison and Poison (for APIs and parsing)
+- SMTP and Mailjet (for email)
+- News API (for earthquake news)
+- Google Maps API (for displaying earthquake pins)
+
+Some challenges we faced:
+- working with unfamiliar APIs
+- getting email working
+- broadcasting news to users
