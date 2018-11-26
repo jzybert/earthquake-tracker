@@ -11,7 +11,7 @@ https://earthquake.jonathanzybert.com
 https://github.com/jzybert/earthquake-tracker
 
 ### Deployment Status
-Not Deployed
+Deployed
 
 ### Completion Status
 Completed
