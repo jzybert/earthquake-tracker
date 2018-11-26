@@ -107,7 +107,9 @@ is a Google Maps API which we display pins with earthquake information.
 
 #### Your application should use Phoenix Channels to push real-time updates to users, triggered either from an external API or from actions by other concurrent users.
 Our application uses Phoenix Channels to send real-time updates to users about 
-earthquake news which we get from the news API.
+earthquake news which we get from the news API. There is a News tab in the 
+navigation bar where periodically gets news about earthquakes. We use channels
+to display this news to all users.
 
 ### Interesting features beyond requirements
 One interesting feature not needed in the requirements is our periodic 
@@ -116,5 +118,19 @@ receive a daily email with any new earthquakes the occurred within the last
 day for each of their tracked area.
 
 ### Which part of our app is complex? How was it designed?
+The most complex part of our app is the earthquake queries and displaying them.
+Users can query USGS either through entering data on the home page form or 
+by setting a tracked area. With the data from USGS, we display that information
+in a table for the user to view. The complexity comes from parsing that data
+(which we use the library Poison for) and displaying it in a Google Map. There
+is a pin for each earthquake and when they are clicked on they display the
+data for each earthquake. This is complex because we are dealing with a lot of
+data points and is something we haven't worked with before.
 
 ### Most significant challenge?
+One of the most significant challenges was getting the News API working
+with our project. We had worked with Phoenix channels awhile ago, so part of
+the process was relearning how they work. It was also difficult to broadcast
+the data as well as parsing it on the front-end. Another challenge was the
+periodic updates for both emails and news. We had to figure out how to re-run
+code every so often which was new to us in Phoenix.
