@@ -6,8 +6,8 @@ defmodule EarthquakeTrackerWeb.NewsQueryController do
     render(conn, "index.html", articles: articles)
   end
 
-  def query_news() do
-    data = query_news_data()
+  def channel_query_news(page \\ 1) do
+    data = query_news_data(page)
 
     articles = Map.get(data, :article_data)
     num_of_articles = Map.get(data, :num_of_articles)
@@ -16,8 +16,8 @@ defmodule EarthquakeTrackerWeb.NewsQueryController do
       String.downcase(article.description) =~ "earthquake" end)
   end
 
-  def query_news(conn) do
-    data = query_news_data()
+  def query_news(conn, page \\ 1) do
+    data = query_news_data(page)
 
     articles = Map.get(data, :article_data)
     num_of_articles = Map.get(data, :num_of_articles)
@@ -31,9 +31,10 @@ defmodule EarthquakeTrackerWeb.NewsQueryController do
     end
   end
 
-  def query_news_data() do
+  def query_news_data(page \\ 1) do
     url = "https://newsapi.org/v2/everything?q=earthquake&from=" <> Date.to_string(Date.add(Date.utc_today(), -7)) <>
-          "&sortBy=relevancy&pageSize=100&apiKey=" <> Application.get_env(:earthquake_tracker, News)[:news_api_key]
+          "&sortBy=relevancy&pageSize=100&page="<> Integer.to_string(page, 10) <> "&apiKey=" <>
+          Application.get_env(:earthquake_tracker, News)[:news_api_key]
 
     headers = []
     params = []

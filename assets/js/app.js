@@ -189,15 +189,17 @@ $(() => {
   // this stuff is only necessary for the news page.
   if (window.location.pathname == "/news") {
     let news_channel = socket.channel('news:lobby', {});
+    let page = 1;
 
-    news_channel.on('shout', (payload) => {
-      console.log("reloading news");
+    function handleEvent(type, payload) {
       let list = $('#news-container');
       let articles = [];
       for (var key in payload) {
         articles = payload[key];
       }
-      list.empty();
+      if(type == "shout") {
+        list.empty();
+      }
       _.each(articles, (article) => {
         article = JSON.parse(article);
         console.log(article);
@@ -218,12 +220,27 @@ $(() => {
           "</div>" +
         "</div>");
       });
+    }
+
+    news_channel.on('shout', (payload) => {
+      console.log("reloading news");
+        handleEvent("shout", payload);
+    });
+
+    news_channel.on('more', (payload) => {
+      console.log("more news");
+      handleEvent("more", payload);
     });
 
     news_channel.join().receive("ok", resp => { console.log("joined News") });
 
+    $('#more-news').click(() => {
+      page += 1;
+      news_channel.push("more", {page: page});
+    });
+
     // add timer to call "shout" every so often
-    setInterval(() => { news_channel.push("shout", {}) }, 1000 * 60 * 15);
+    setInterval(() => { news_channel.push("shout", {}); }, 1000 * 60 * 0.5);
   }
 
   $(document).ready(() => {

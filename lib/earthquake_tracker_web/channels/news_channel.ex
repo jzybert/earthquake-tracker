@@ -21,10 +21,19 @@ defmodule EarthquakeTrackerWeb.NewsChannel do
   # broadcast to everyone in the current topic (news:lobby).
   def handle_in("shout", payload, socket) do
     # query the news
-    articles = NewsQueryController.query_news()
+    articles = NewsQueryController.channel_query_news()
     articles = Enum.map(articles, fn article -> Poison.encode!(article) end)
     # shout the info
     broadcast socket, "shout", %{articles => articles}
+    {:noreply, socket}
+  end
+
+  def handle_in("more", payload, socket) do
+    # query the news
+    articles = NewsQueryController.channel_query_news(Map.get(payload, "page"))
+    articles = Enum.map(articles, fn article -> Poison.encode!(article) end)
+    # shout the info
+    broadcast socket, "more", %{articles => articles}
     {:noreply, socket}
   end
 

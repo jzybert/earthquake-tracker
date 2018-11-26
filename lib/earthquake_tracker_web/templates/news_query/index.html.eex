@@ -22,6 +22,7 @@
         </div>
       <% end %>
     </div>
+    <button id="more-news" class="btn btn-primary">More news</button>
   </div>
   <div class="col-1"></div>
 </div>
