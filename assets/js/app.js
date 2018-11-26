@@ -202,7 +202,6 @@ $(() => {
       }
       _.each(articles, (article) => {
         article = JSON.parse(article);
-        console.log(article);
         list.append("<div class=\"card\">" +
           "<div class=\"card-body\">" +
             "<h4>"+ article.title +"</h4>" +
@@ -240,7 +239,7 @@ $(() => {
     });
 
     // add timer to call "shout" every so often
-    setInterval(() => { news_channel.push("shout", {}); }, 1000 * 60 * 0.5);
+    setInterval(() => { news_channel.push("shout", {}); }, 1000 * 60 * 15);
   }
 
   $(document).ready(() => {

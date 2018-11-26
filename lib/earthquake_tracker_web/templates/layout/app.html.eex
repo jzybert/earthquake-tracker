@@ -32,7 +32,7 @@
         </ul>
         <%= if @current_user do %>
           <div class="ml-auto">
-            <p>
+            <p class="user-info">
               <%= link(@current_user.email, to: Routes.user_path(@conn, :show, @current_user)) %> |
               <%= link("Logout", to: Routes.session_path(@conn, :delete), method: :delete) %>
             </p>

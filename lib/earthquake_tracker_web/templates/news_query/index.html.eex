@@ -22,7 +22,16 @@
         </div>
       <% end %>
     </div>
-    <button id="more-news" class="btn btn-primary">More news</button>
+    <br />
+    <div class="text-center">
+      <button id="more-news" class="btn btn-primary">More news</button>
+    </div>
+    <hr />
+    <footer>
+      <p class="text-center">
+        News provided by <%= link "News API", to: "https://newsapi.org/" %>.
+      </p>
+    </footer>
   </div>
   <div class="col-1"></div>
 </div>
