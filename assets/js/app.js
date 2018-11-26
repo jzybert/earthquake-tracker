@@ -186,6 +186,46 @@ $(() => {
     }
   });
 
+  // this stuff is only necessary for the news page.
+  if (window.location.pathname == "/news") {
+    let news_channel = socket.channel('news:lobby', {});
+
+    news_channel.on('shout', (payload) => {
+      console.log("reloading news");
+      let list = $('#news-container');
+      let articles = [];
+      for (var key in payload) {
+        articles = payload[key];
+      }
+      list.empty();
+      _.each(articles, (article) => {
+        article = JSON.parse(article);
+        console.log(article);
+        list.append("<div class=\"card\">" +
+          "<div class=\"card-body\">" +
+            "<h4>"+ article.title +"</h4>" +
+            "<div class=\"row\">" +
+              "<div class=\"col-3\">" +
+                "<img src=\""+ article.url_to_image +"\" class=\"img-fluid\"/>" +
+              "</div>" +
+              "<div class=\"col-9\">" +
+                "<p><b>From:</b> "+ article.source +" | "+ article.published_at +"</p>" +
+                "<hr />" +
+                "<p><b>Description:</b> "+ article.description +"</p>" +
+                "<p><b>Full story:</b> <a href=\""+ article.url +"\">"+ article.url +"</a></p>" +
+              "</div>" +
+            "</div>" +
+          "</div>" +
+        "</div>");
+      });
+    });
+
+    news_channel.join().receive("ok", resp => { console.log("joined News") });
+
+    // add timer to call "shout" every so often
+    setInterval(() => { news_channel.push("shout", {}) }, 1000 * 60 * 15);
+  }
+
   $(document).ready(() => {
     initData(data);
     initMap(data);

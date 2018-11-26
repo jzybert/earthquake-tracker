@@ -3,9 +3,17 @@ defmodule EarthquakeTrackerWeb.NewsQueryController do
 
   def index(conn, _params) do
     articles = query_news(conn)
-    IO.puts("\n[DATE]\n#{Date.to_string(Date.add(Date.utc_today(), -7))}\n")
-    IO.puts("\n[ARTICLES]\n#{inspect(articles)}\n")
     render(conn, "index.html", articles: articles)
+  end
+
+  def query_news() do
+    data = query_news_data()
+
+    articles = Map.get(data, :article_data)
+    num_of_articles = Map.get(data, :num_of_articles)
+
+    Enum.filter(articles, fn article -> String.downcase(article.title) =~ "earthquake" ||
+      String.downcase(article.description) =~ "earthquake" end)
   end
 
   def query_news(conn) do

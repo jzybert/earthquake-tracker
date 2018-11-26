@@ -3,6 +3,7 @@ defmodule EarthquakeTrackerWeb.UserSocket do
 
   ## Channels
   # channel "room:*", EarthquakeTrackerWeb.RoomChannel
+  channel "news:lobby", EarthquakeTrackerWeb.NewsChannel
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After
